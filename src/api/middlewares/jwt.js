@@ -12,7 +12,7 @@ function verifyToken(token, errorCallback, successCallback) {
   });
 }
 
-export {
+module.exports = {
   getToken,
   verifyToken,
 };

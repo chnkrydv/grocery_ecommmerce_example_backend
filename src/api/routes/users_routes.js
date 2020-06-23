@@ -34,7 +34,7 @@ function login(req, res) {
 
 function logout() { }
 
-export {
+module.exports = {
   signup,
   login,
   logout,

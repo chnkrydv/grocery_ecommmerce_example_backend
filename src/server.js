@@ -1,19 +1,14 @@
 const express = require('express');
 const server = express();
 const { DEBUG_MODE_PORT } = require('./constants/config');
+const { getProductsList } = require('./api/routes/products_routes');
+const port = process.env.PORT || DEBUG_MODE_PORT;
 
 server.get('/', (_, res)=> {
-  res.send('listening to port 9999');
+  res.send(`listening to port ${port}`);
 });
 
-server.get('/api/users', (req, res)=>{});
-
-server.get('/api/orders', (req, res)=>{});
-
-server.use('/api/products', (req, res)=>{
-  res.send()
-});
+server.use('/api/products', getProductsList);
 
 
-const port = process.env.PORT || DEBUG_MODE_PORT;
 server.listen(port, () => console.log(`listening to port: ${port}`));

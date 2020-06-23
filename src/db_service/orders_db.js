@@ -20,7 +20,7 @@ function createOrder(userId, productsList, deliveryDate) {
   return newOrderId;
 }
 
-export {
+module.exports = {
   getOrders,
   getOrderProductMap,
   createOrder,

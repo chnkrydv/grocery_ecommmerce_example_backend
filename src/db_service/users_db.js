@@ -20,7 +20,7 @@ function addUser(type, name, username, password) {
   return newUserId;
 }
 
-export {
+module.exports = {
   getUsers,
   addUser,
 };
