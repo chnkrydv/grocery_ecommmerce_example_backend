@@ -1,7 +1,7 @@
-const { productsList } = require('../../db_service/products/products_db')
+const { productsCatalog } = require('../../db_service/products_db')
 
 function getProductsList(_, res){
-  res.json(productsList);
+  res.json(productsCatalog);
 }
 
 module.exports = {
