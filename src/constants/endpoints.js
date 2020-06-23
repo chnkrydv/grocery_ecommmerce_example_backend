@@ -1,0 +1,10 @@
+const api = '/api'
+
+const GET_ALL_PRODUCTS = 'api/products'
+const GET_ALL_DAIRY = 'api/products/dairy'
+const GET_ALL_VEGETABLES = 'api/products/vegetables'
+const GET_ALL_FRUITS = 'api/products/fruits'
+const GET_ALL_PROVISIONS = 'api/products/provisions'
+const GET_ALL_CEREALS = 'api/products/provisions/cereals'
+const GET_ALL_LEGUMES = 'api/products/provisions/legumes'
+const GET_ALL_SPICES = 'api/products/provisions/spices'
