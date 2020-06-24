@@ -20,7 +20,12 @@ function addUser(type, name, username, password) {
   return newUserId;
 }
 
+function userAlreadyExists(username){
+  return usersList.some(u => u.username === username);
+}
+
 module.exports = {
   getUsers,
   addUser,
+  userAlreadyExists,
 };

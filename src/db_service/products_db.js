@@ -1,7 +1,7 @@
-function p(productId, imageSrc, name, brand, unit, price) {
+function p(productId, imageSource, name, brand, unit, price) {
   return {
     productId,
-    imageSrc,
+    imageSource,
     name,
     brand,
     unit,
@@ -11,7 +11,7 @@ function p(productId, imageSrc, name, brand, unit, price) {
 
 const productsCatalog = {
   dairy: {
-    imageSrc: '/images/dairy.jpg',
+    imageSource: '/images/dairy.jpg',
     items: [
       p('d1', '/images/d1.jpg', 'butter', 'amul', '200gm', 50),
       p('d2', '/images/d2.jpg', 'cheese', 'amul', '200gm', 79),
@@ -23,7 +23,7 @@ const productsCatalog = {
     ],
   },
   fruits: {
-    imageSrc: '/images/fruits.jpg',
+    imageSource: '/images/fruits.jpg',
     items: [
       p('f1', '/images/f1.jpg', 'apple', 'generic', '500gm', 45),
       p('f2', '/images/f2.jpg', 'grapes', 'generic', '500gm', 40),
@@ -35,7 +35,7 @@ const productsCatalog = {
     ],
   },
   legumes: {
-    imageSrc: '/images/legumes.jpg',
+    imageSource: '/images/legumes.jpg',
     items: [
       p('l1', '/images/l1.jpg', 'chana dal', 'generic', '500gm', 30),
       p('l2', '/images/l2.jpg', 'toor dal', 'generic', '500gm', 45),
@@ -51,7 +51,7 @@ const productsCatalog = {
     ],
   },
   spices: {
-    imageSrc: '/images/spices.jpg',
+    imageSource: '/images/spices.jpg',
     items: [
       p('spc1', '/images/spc1.jpg', 'chicken masala', 'everest', '200gm', 78),
       p('spc2', '/images/spc2.jpg', 'coriander powder', 'everest', '200gm', 22),
@@ -67,7 +67,7 @@ const productsCatalog = {
     ],
   },
   staples: {
-    imageSrc: '/images/staples.jpg',
+    imageSource: '/images/staples.jpg',
     items: [
       p('stp1', '/images/stp1.jpg', 'rice (boiled)', 'generic', '1kg', 38),
       p('stp2', '/images/stp2.jpg', 'rice', 'generic', '1kg', 42),
@@ -80,7 +80,7 @@ const productsCatalog = {
     ],
   },
   vegetables: {
-    imageSrc: '/images/vegetables.jpg',
+    imageSource: '/images/vegetables.jpg',
     items: [
       p('v1', '/images/v1.jpg', 'brinjal', 'generic', '500gm', 45),
       p('v2', '/images/v2.jpg', 'cabbage', 'generic', '1 each', 25),
