@@ -1,5 +1,6 @@
 const express = require('express');
 const server = express();
+const bodyParser = require('body-parser');
 
 const handleCors = require('./api/middlewares/cors');
 const { ifAuthenticated } = require('./api/middlewares/jwt');
@@ -14,6 +15,8 @@ const port = process.env.PORT || DEBUG_MODE_PORT;
 
 
 
+server.use(bodyParser.urlencoded({extended: true}));
+server.use(bodyParser.json());
 server.use(handleCors);
 server.use('/images/', express.static(__dirname + '/public/'));
 
@@ -23,10 +26,10 @@ server.use('/images/', express.static(__dirname + '/public/'));
 server.get('/', (_, res) => res.send(`listening to port ${port}`));
 server.get('/products', sendProductCategories);
 server.get('/products/:category', sendCategoryItems);
-server.get('/orders', ifAuthenticated, sendOrdersList);
+server.get('/account/orders', ifAuthenticated, sendOrdersList);
 
-server.post('/user/login', login);
-server.post('/user/signup', signup);
+server.post('/account/login', login);
+server.post('/account/signup', signup);
 server.post('/order', ifAuthenticated, createOrder);
 
 

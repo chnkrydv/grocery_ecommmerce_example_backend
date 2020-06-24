@@ -17,7 +17,7 @@ function sendCategoryItems(req, res) {
 
   if (!categoryNameExists) {
     res.status(404).json({
-      message: `Requested category: "${category}" does not exist.`
+      message: `Requested category: '${category}' does not exist.`
     });
   } else {
     const categoryProducts = productsCatalog[category]['items'];

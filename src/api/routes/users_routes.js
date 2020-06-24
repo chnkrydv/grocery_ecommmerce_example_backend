@@ -17,7 +17,8 @@ function signup(req, res) {
 
 function login(req, res) {
   const { username, password } = req.body;
-  const user = getUsers().find(user => user.username === username);
+  const usersList = getUsers();
+  const user = usersList.find(user => user.username === username);
 
   if (!user) {
     res.status(401).json({
@@ -34,7 +35,11 @@ function login(req, res) {
   }
 
   const token = getToken(user.id);
-  res.status(200).json(token);
+  if (!token) {
+    res.status(401).json({});
+  } else {
+    res.status(200).json(token);
+  }
 }
 
 module.exports = {
