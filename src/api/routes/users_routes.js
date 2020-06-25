@@ -5,7 +5,9 @@ function signup(req, res) {
   const { name, username, password } = req.body;
   const usernameExists = userAlreadyExists(username);
 
-  if (usernameExists) res.status(401).json({ message: `User with username: "${username}" already exists` });
+  if (usernameExists) res.status(401).json({
+    message: `User with username: '${username}' already exists`
+  });
   else {
     const newUserId = addUser('consumer', name, username, password);
     res.status(200).json({
@@ -43,6 +45,6 @@ function login(req, res) {
 }
 
 module.exports = {
-  signup,
   login,
+  signup,
 };
