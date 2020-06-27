@@ -1,14 +1,15 @@
 const express = require('express');
 const server = express();
 const bodyParser = require('body-parser');
+const path = require('path');
 
-const handleCors = require('./api/middlewares/cors');
-const { ifAuthenticated } = require('./api/middlewares/jwt');
+const handleCors = require('./middlewares/cors');
+const { ifAuthenticated } = require('./middlewares/jwt');
 
-const { login, signup } = require('./api/routes/users_routes');
-const { sendProductCategories, sendCategoryItems } = require('./api/routes/products_routes');
-const { sendOrdersList, createOrder } = require('./api/routes/orders_routes');
-const { DEBUG_MODE_PORT } = require('./constants/config');
+const { login, signup } = require('./routes/users_routes');
+const { sendProductCategories, sendCategoryItems } = require('./routes/products_routes');
+const { sendOrdersList, createOrder } = require('./routes/orders_routes');
+const { DEBUG_MODE_PORT } = require('../constants/config');
 
 const port = process.env.PORT || DEBUG_MODE_PORT;
 
@@ -18,7 +19,7 @@ const port = process.env.PORT || DEBUG_MODE_PORT;
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
 server.use(handleCors);
-server.use('/images/', express.static(__dirname + '/public/'));
+server.use('/images/', express.static(path.join(__dirname, '../public')));
 
 
 

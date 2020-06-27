@@ -1,8 +1,9 @@
 const ordersList = [
+  order(0, 1, [{f1: 12}], '12July', 'active'),
 ];
 
-function order(id, userId, products, deliveryDate, status) {
-  return { id, userId, products, deliveryDate, status };
+function order(id, userId, itemsList, deliveryDate, status) {
+  return { id, userId, itemsList, deliveryDate, status };
 }
 
 function getOrders(userId) {

@@ -19,6 +19,7 @@ function signup(req, res) {
 
 function login(req, res) {
   const { username, password } = req.body;
+  console.log(req.body);
   const usersList = getUsers();
   const user = usersList.find(user => user.username === username);
 
@@ -40,7 +41,7 @@ function login(req, res) {
   if (!token) {
     res.status(401).json({});
   } else {
-    res.status(200).json(token);
+    res.status(200).json({token, user});
   }
 }
 
