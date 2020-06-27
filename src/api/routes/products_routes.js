@@ -25,7 +25,38 @@ function sendCategoryItems(req, res) {
   }
 }
 
+function sendRandomlyRequestedItems(req, res) {
+  const { productIdList } = req.body;
+  const idsList = JSON.parse(productIdList);
+  const categories = Object.keys(productsCatalog);
+  const requestedItems = [];
+
+  idsList.forEach(id => {
+    let idNotFound = true;
+    categories.every(category => {
+      const items = productsCatalog[category]['items'];
+      items.every(item => {
+        console.log(item.productId);
+  
+        if (id === item.productId && idNotFound) {
+          console.log('found one')
+          requestedItems.push(item);
+          idNotFound = false;
+        }
+
+        return idNotFound;
+      });
+
+      return idNotFound;
+    });
+  });
+
+  console.log(requestedItems);
+  res.status(200).json(requestedItems);
+}
+
 module.exports = {
   sendProductCategories,
   sendCategoryItems,
+  sendRandomlyRequestedItems,
 };
