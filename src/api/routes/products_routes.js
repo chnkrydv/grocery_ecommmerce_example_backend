@@ -27,11 +27,12 @@ function sendCategoryItems(req, res) {
 
 function sendRandomlyRequestedItems(req, res) {
   const { productIdList } = req.body;
-  const idsList = JSON.parse(productIdList);
+  console.log(req.body);
+  console.log(productIdList);
   const categories = Object.keys(productsCatalog);
   const requestedItems = [];
 
-  idsList.forEach(id => {
+  productIdList.forEach(id => {
     let idNotFound = true;
     categories.every(category => {
       const items = productsCatalog[category]['items'];
