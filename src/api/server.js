@@ -6,7 +6,7 @@ const path = require('path');
 const handleCors = require('./middlewares/cors');
 const { ifAuthenticated } = require('./middlewares/jwt');
 
-const { login, signup } = require('./routes/users_routes');
+const { login, signup, sendUserProfile } = require('./routes/users_routes');
 const { sendProductCategories, sendCategoryItems } = require('./routes/products_routes');
 const { sendOrdersList, createOrder } = require('./routes/orders_routes');
 const { DEBUG_MODE_PORT } = require('../constants/config');
@@ -27,6 +27,7 @@ server.use('/images/', express.static(path.join(__dirname, '../public')));
 server.get('/', (_, res) => res.send(`listening to port ${port}`));
 server.get('/products', sendProductCategories);
 server.get('/products/:category', sendCategoryItems);
+server.get('/account/profile', ifAuthenticated, sendUserProfile);
 server.get('/account/orders', ifAuthenticated, sendOrdersList);
 
 server.post('/account/login', login);

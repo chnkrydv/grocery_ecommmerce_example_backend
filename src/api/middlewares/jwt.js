@@ -1,7 +1,7 @@
 const { TOKEN_SECRET } = require('../../constants/config');
 const jwt = require('jsonwebtoken');
 
-function getToken(userId) {
+function createNewToken(userId) {
   console.log('JWT_SECRET: ' + TOKEN_SECRET);
   return jwt.sign({ userId }, TOKEN_SECRET, { expiresIn: '30m' })
 }
@@ -26,7 +26,7 @@ function ifAuthenticated(req, res, next) {
 }
 
 module.exports = {
-  getToken,
+  createNewToken,
   ifAuthenticated,
 };
 

@@ -1,5 +1,5 @@
 const { getUsers, addUser, userAlreadyExists } = require('../../db_service/users_db');
-const { getToken } = require('../middlewares/jwt');
+const { createNewToken } = require('../middlewares/jwt');
 
 function signup(req, res) {
   const { name, username, password } = req.body;
@@ -37,7 +37,7 @@ function login(req, res) {
     return;
   }
 
-  const token = getToken(user.id);
+  const token = createNewToken(user.id);
   if (!token) {
     res.status(401).json({});
   } else {
@@ -45,7 +45,15 @@ function login(req, res) {
   }
 }
 
+function sendUserProfile(req, res){
+  const usersList = getUsers();
+  const user = usersList.find(user => user.id === req.userId);
+  console.log(user);
+  res.status(200).json(user);
+}
+
 module.exports = {
   login,
   signup,
+  sendUserProfile,
 };
