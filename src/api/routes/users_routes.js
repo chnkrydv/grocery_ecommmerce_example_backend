@@ -1,4 +1,4 @@
-const { getUsers, addUser, userAlreadyExists } = require('../../db_service/users_db');
+const { getUsers, addUser, userAlreadyExists, updateAddress } = require('../../db_service/users_db');
 const { createNewToken } = require('../middlewares/jwt');
 
 function signup(req, res) {
@@ -52,8 +52,19 @@ function sendUserProfile(req, res){
   res.status(200).json(user);
 }
 
+function saveOrUpdateAddress(req, res) {
+  const userId = req.userId;
+  const { address } = req.body;
+  console.log(address);
+  updateAddress(userId, address);
+  res.status(200).json({
+    message: 'Address updated.'
+  });
+}
+
 module.exports = {
   login,
   signup,
   sendUserProfile,
+  saveOrUpdateAddress,
 };

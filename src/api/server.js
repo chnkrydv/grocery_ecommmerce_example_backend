@@ -6,7 +6,7 @@ const path = require('path');
 const handleCors = require('./middlewares/cors');
 const { ifAuthenticated } = require('./middlewares/jwt');
 
-const { login, signup, sendUserProfile } = require('./routes/users_routes');
+const { login, signup, sendUserProfile, saveOrUpdateAddress } = require('./routes/users_routes');
 const { sendProductCategories, sendCategoryItems, sendRandomlyRequestedItems } = require('./routes/products_routes');
 const { sendOrdersList, createOrder } = require('./routes/orders_routes');
 const { DEBUG_MODE_PORT } = require('../constants/config');
@@ -33,6 +33,7 @@ server.get('/account/orders', ifAuthenticated, sendOrdersList);
 server.post('/products/requested', sendRandomlyRequestedItems);
 server.post('/account/login', login);
 server.post('/account/signup', signup);
+server.post('/account/profile/address', ifAuthenticated, saveOrUpdateAddress);
 server.post('/order', ifAuthenticated, createOrder);
 
 

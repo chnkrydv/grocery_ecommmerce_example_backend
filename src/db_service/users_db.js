@@ -1,12 +1,10 @@
-const usersList = [
-  getUserMap('admin', 0, 'Harnit Bakshi', 'harnit', '0000'),
-  getUserMap('admin', 1, 'Chandan Kumar', 'chandan', '1111'),
+let usersList = [
+  u(0, 'Harnit Bakshi', 'harnit', '0000'),
+  u(1, 'Chandan Kumar', 'chandan', '1111'),
 ];
 
-function getUserMap(type, id, name, username, password) {
-  return {
-    type, id, name, username, password
-  };
+function u(id, name, username, password){
+  return { id, name, username, password };
 }
 
 function getUsers() {
@@ -15,17 +13,26 @@ function getUsers() {
 
 function addUser(type, name, username, password) {
   const newUserId = usersList.length;
-  const newUser = getUserMap(type, newUserId, name, username, password);
+  const newUser = u(type, newUserId, name, username, password);
   usersList.push(newUser);
   return newUserId;
 }
 
-function userAlreadyExists(username){
+function userAlreadyExists(username) {
   return usersList.some(u => u.username === username);
+}
+
+function updateAddress(userId, address) {
+  const newUsersList = usersList.map(user => {
+    if (user.id === userId) user.address = address;
+    return user
+  });
+  usersList = [...newUsersList];
 }
 
 module.exports = {
   getUsers,
   addUser,
   userAlreadyExists,
+  updateAddress,
 };
