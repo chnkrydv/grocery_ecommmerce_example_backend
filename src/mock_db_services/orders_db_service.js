@@ -1,5 +1,5 @@
 const ordersList = [
-  order(0, 1, [{f1: 12}], '12July', 'active'),
+  order(0, 0, [{f1: 12}], '12July', 'active'),
 ];
 
 function order(id, userId, itemsList, deliveryDate, status) {

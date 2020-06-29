@@ -2,12 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 
 const server = require('../../api/server');
-const {
-  getUsers,
-  addUser,
-  userAlreadyExists,
-  updateAddress,
-} = require('../../mock_db_services/users_db_service');
+const { getUsers } = require('../../mock_db_services/users_db_service');
 const {
   AUTH_TOKEN_MISSING_OR_INVALID_MESSAGE,
   BAD_SIGNUP_REQ_MESSAGE,
@@ -15,6 +10,7 @@ const {
   INVALID_USERNAME_MESSAGE,
   INVALID_PASSWORD_MESSAGE,
   USER_ADDED_MESSAGE,
+  BAD_ADDRESS_REQ_MESSAGE,
   ADDRESS_UPDATE_MESSAGE,
   exisitingUserMessage,
 } = require('../../constants/messages');
@@ -31,6 +27,7 @@ describe('Users API', () => {
   const badLoginRequestMessage = { message: BAD_LOGIN_REQ_MESSAGE };
   const invalidUsernameMessage = { message: INVALID_USERNAME_MESSAGE };
   const invalidPasswordMessage = { message: INVALID_PASSWORD_MESSAGE };
+  const badAddressRequestMessage = { message: BAD_ADDRESS_REQ_MESSAGE };
   const exisitingUserMessageObj = (username) => ({ message: exisitingUserMessage(username) });
 
 
@@ -40,6 +37,7 @@ describe('Users API', () => {
 
   describe('POST /account/signup', () => {
     const validNewUser = { name: 'Firstname Lastname', username: 'flname', password: 'pswd' };
+    const anotherNewUser = { name: 'Firstname Lastname', username: 'newUsername', password: 'pswd' };
 
     it('creates new user account and sends success message', (done) => {
       chai
@@ -47,14 +45,31 @@ describe('Users API', () => {
         .post('/account/signup')
         .send(validNewUser)
         .end((_, res) => {
+          expect(res.body.message).exist;
+          expect(res.body.userId).exist;
+          expect(res.body.token).exist;
           res.should.have.status(200);
-          expect(res.body.message).to.equal(USER_ADDED_MESSAGE);
+          res.body.message.should.be.eq(USER_ADDED_MESSAGE);
+          res.body.userId.should.be.a('number');
+          res.body.token.should.be.a('string');
 
           done();
         });
     });
 
-    it('sends user token instantly after signup', () => { });
+    it('sends user token instantly after signup', (done) => {
+      chai
+        .request(server)
+        .post('/account/signup')
+        .send(anotherNewUser)
+        .end((_, res) => {
+          res.should.have.status(200);
+          expect(res.body.token).exist;
+          res.body.token.should.be.a('string');
+
+          done();
+        });
+    });
 
     it('returns 400: Bad Request if request body is missing', (done) => {
       chai
@@ -68,7 +83,7 @@ describe('Users API', () => {
         });
     });
 
-    it('returns 400: Bad Request if request body is missing or invalid', (done) => {
+    it('returns 400: Bad Request if request body is invalid', (done) => {
       const badRequestObject = { username: 'somethingOkay', passssssswooorddd: 'with-random-value' };
 
       chai
@@ -257,10 +272,103 @@ describe('Users API', () => {
 
 
   describe('POST /account/profile/address', () => {
-    it("create new or update user's address", () => { });
+    const validAddress = { line1: 'line one', line2: 'line two', line3: 'line three' };
+    const emptyValidAddress = { line1: '', line2: '', line3: '' };
+    const invalidFieldsAddress = { line1000: 'line one', line2000: 'line two', line3000: 'line three' };
+    let token;
 
-    it('returns 401: Unauthorized, if token is missing or invalid', () => { });
+    it("creates new or updates user's address", (done) => {
+      chai
+        .request(server)
+        .post('/account/login')
+        .send(validUser)
+        .end((_, res) => {
+          token = res.body.token;
 
-    it('returns 400: Bad Request if address in request body is missing or not in correct format', () => { });
+          chai
+            .request(server)
+            .post('/account/profile/address')
+            .set('x-access-token', token)
+            .send({ address: validAddress })
+            .end((_, res) => {
+
+              res.should.have.status(200);
+              expect(res.body).to.deep.equal({ message: ADDRESS_UPDATE_MESSAGE });
+
+              done();
+            });
+        });
+    });
+
+    it('returns 401: Unauthorized, if token is missing', (done) => {
+      chai
+        .request(server)
+        .post('/account/profile/address')
+        .send({ address: validAddress })
+        .end((_, res) => {
+
+          res.should.have.status(401);
+          expect(res.body).to.deep.equal(invalidTokenMessage);
+
+          done();
+        });
+    });
+
+    it('returns 401: Unauthorized, if token is invalid', (done) => {
+      chai
+        .request(server)
+        .post('/account/profile/address')
+        .set('x-access-token', 'some-invalid-token')
+        .send({ address: validAddress })
+        .end((_, res) => {
+
+          res.should.have.status(401);
+          expect(res.body).to.deep.equal(invalidTokenMessage);
+
+          done();
+        });
+    });
+
+    it('returns 400: Bad Request, if address in request is missing', (done) => {
+      chai
+        .request(server)
+        .post('/account/profile/address')
+        .set('x-access-token', token)
+        .send({})
+        .end((_, res) => {
+          res.should.have.status(400);
+          expect(res.body).to.deep.equal(badAddressRequestMessage);
+
+          done();
+        });
+    });
+
+    it('returns 400: Bad Request, if all address lines are empty string', (done) => {
+      chai
+        .request(server)
+        .post('/account/profile/address')
+        .set('x-access-token', token)
+        .send({ address: emptyValidAddress })
+        .end((_, res) => {
+          res.should.have.status(400);
+          expect(res.body).to.deep.equal(badAddressRequestMessage);
+
+          done();
+        });
+    });
+
+    it('returns 400: Bad Request, if address object is not in correct format', (done) => {
+      chai
+        .request(server)
+        .post('/account/profile/address')
+        .set('x-access-token', token)
+        .send({ address: invalidFieldsAddress })
+        .end((_, res) => {
+          res.should.have.status(400);
+          expect(res.body).to.deep.equal(badAddressRequestMessage);
+
+          done();
+        });
+    });
   });
 });

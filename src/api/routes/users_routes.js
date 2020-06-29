@@ -8,6 +8,7 @@ const {
   INVALID_PASSWORD_MESSAGE,
   USER_ADDED_MESSAGE,
   ADDRESS_UPDATE_MESSAGE,
+  BAD_ADDRESS_REQ_MESSAGE,
 } = require('../../constants/messages');
 
 function signup(req, res) {
@@ -22,9 +23,12 @@ function signup(req, res) {
   if (usernameExists) res.status(401).json({ message: exisitingUserMessage(username) });
   else {
     const newUserId = addUser(name, username, password);
+    const token = createNewToken(newUserId);
+
     res.status(200).json({
       message: USER_ADDED_MESSAGE,
       userId: newUserId,
+      token,
     });
   }
 }
@@ -68,8 +72,17 @@ function sendUserProfile(req, res) {
 function saveOrUpdateAddress(req, res) {
   const userId = req.userId;
   const { address } = req.body;
-  updateAddress(userId, address);
-  res.status(200).json({ message: ADDRESS_UPDATE_MESSAGE });
+
+  if (!address) {
+    res.status(400).json({ message: BAD_ADDRESS_REQ_MESSAGE });
+  } else {
+    if (!address.line1 && !address.line2 && !address.line3) {
+      res.status(400).json({ message: BAD_ADDRESS_REQ_MESSAGE });
+    } else {
+      updateAddress(userId, address);
+      res.status(200).json({ message: ADDRESS_UPDATE_MESSAGE });
+    }
+  }
 }
 
 module.exports = {

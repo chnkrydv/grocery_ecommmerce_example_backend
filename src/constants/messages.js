@@ -5,6 +5,7 @@ const BAD_LOGIN_REQ_MESSAGE = "'username' or 'password' missing in request";
 const INVALID_USERNAME_MESSAGE = 'This username is not registered. Please sign up if you are a new user.';
 const INVALID_PASSWORD_MESSAGE = 'Access denied. Incorrect password.';
 const USER_ADDED_MESSAGE = 'User added successfully.';
+const BAD_ADDRESS_REQ_MESSAGE = 'Address is missing or not in correct format.';
 const ADDRESS_UPDATE_MESSAGE = 'Address updated successfully.';
 const exisitingUserMessage = (username) => `User with username: '${username}' already exists`;
 
@@ -21,6 +22,7 @@ module.exports = {
   INVALID_USERNAME_MESSAGE,
   INVALID_PASSWORD_MESSAGE,
   USER_ADDED_MESSAGE,
+  BAD_ADDRESS_REQ_MESSAGE,
   ADDRESS_UPDATE_MESSAGE,
   exisitingUserMessage,
 
