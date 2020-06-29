@@ -1,5 +1,5 @@
-const { getOrders, createNewOrder } = require('../../db_service/orders_db');
-const { checkLimitedItems, requestItemsAndUpdateInventory } = require('../../db_service/inventory_db');
+const { getOrders, createNewOrder } = require('../../mock_db_services/orders_db_service');
+const { checkLimitedItems, requestItemsAndUpdateInventory } = require('../../mock_db_services/inventory_db_service');
 
 function sendOrdersList(req, res) {
   const { userId } = req.body;

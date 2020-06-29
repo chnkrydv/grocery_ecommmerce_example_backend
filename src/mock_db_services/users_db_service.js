@@ -11,9 +11,9 @@ function getUsers() {
   return usersList;
 }
 
-function addUser(type, name, username, password) {
+function addUser(name, username, password) {
   const newUserId = usersList.length;
-  const newUser = u(type, newUserId, name, username, password);
+  const newUser = u(newUserId, name, username, password);
   usersList.push(newUser);
   return newUserId;
 }

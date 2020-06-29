@@ -1,7 +1,8 @@
-const { getUsers, addUser, userAlreadyExists, updateAddress } = require('../../db_service/users_db');
+const { getUsers, addUser, userAlreadyExists, updateAddress } = require('../../mock_db_services/users_db_service');
 const { createNewToken } = require('../middlewares/jwt');
 
 function signup(req, res) {
+  console.log(req.body);
   const { name, username, password } = req.body;
   const usernameExists = userAlreadyExists(username);
 
@@ -9,7 +10,8 @@ function signup(req, res) {
     message: `User with username: '${username}' already exists`
   });
   else {
-    const newUserId = addUser('consumer', name, username, password);
+    const newUserId = addUser(name, username, password);
+    console.log(getUsers());
     res.status(200).json({
       message: 'user added',
       userId: newUserId,

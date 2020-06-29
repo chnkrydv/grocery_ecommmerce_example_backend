@@ -9,8 +9,9 @@ function p(productId, imageSource, name, brand, unit, price) {
   };
 }
 
-const productsCatalog = {
-  dairy: {
+const productsCatalog = [
+  {
+    type: 'dairy',
     imageSource: '/images/dairy.jpg',
     items: [
       p('d1', '/images/d1.jpg', 'butter', 'amul', '200gm', 50),
@@ -22,7 +23,8 @@ const productsCatalog = {
       p('d7', '/images/d7.jpg', 'snadwich bread', 'modern', '450gm', 38),
     ],
   },
-  fruits: {
+  {
+    type: 'fruits',
     imageSource: '/images/fruits.jpg',
     items: [
       p('f1', '/images/f1.jpg', 'apple', 'generic', '500gm', 45),
@@ -34,7 +36,8 @@ const productsCatalog = {
       p('f7', '/images/f7.jpg', 'watermelon', 'generic', '1 each', 30),
     ],
   },
-  vegetables: {
+  {
+    type: 'vegetables',
     imageSource: '/images/vegetables.jpg',
     items: [
       p('v1', '/images/v1.jpg', 'brinjal', 'generic', '500gm', 45),
@@ -54,7 +57,8 @@ const productsCatalog = {
       p('v15', '/images/v15.jpg', 'tomato', 'generic', '1kg', 20),
     ],
   },
-  staples: {
+  {
+    type: 'staples',
     imageSource: '/images/staples.jpg',
     items: [
       p('stp1', '/images/stp1.jpg', 'rice (boiled)', 'generic', '1kg', 38),
@@ -67,7 +71,8 @@ const productsCatalog = {
       p('stp8', '/images/stp8.jpg', 'rock salt', 'tata', '200gm', 35),
     ],
   },
-  legumes: {
+  {
+    type: 'legumes',
     imageSource: '/images/legumes.jpg',
     items: [
       p('l1', '/images/l1.jpg', 'chana dal', 'generic', '500gm', 30),
@@ -83,7 +88,8 @@ const productsCatalog = {
       p('l11', '/images/l11.jpg', 'kidnery beans (white)', 'generic', '500gm', 80),
     ],
   },
-  spices: {
+  {
+    type: 'spices',
     imageSource: '/images/spices.jpg',
     items: [
       p('spc1', '/images/spc1.jpg', 'chicken masala', 'everest', '200gm', 78),
@@ -99,6 +105,49 @@ const productsCatalog = {
       p('spc11', '/images/spc11.jpg', 'mustard seeds', 'vedaka', '200gm', 55),
     ],
   },
-};
+];
 
-module.exports = { productsCatalog };
+function productCategoryExists(categoryType){
+  return productsCatalog.some(category => category.type === categoryType);
+}
+
+function getProductsCatalog() {
+  return productsCatalog.map(({type, imageSource, items}) => ({
+    type,
+    imageSource,
+    items: items.length
+  }));
+}
+
+function getProductsInACategory(category){
+  return productsCatalog.find(c => c.type === category);
+}
+
+function getProductsByIdsList(idsList){
+  const products = [];
+
+  idsList.forEach(id => {
+    let idNotFoundYet = true;
+
+    productsCatalog.every(category => {
+      category['items'].every(product => {
+        if(id === product.productId){
+          idNotFoundYet = false;
+          products.push(product);
+          return idNotFoundYet;
+        }
+        return idNotFoundYet;
+      });
+      return idNotFoundYet;
+    })
+  });
+
+  return products;
+}
+
+module.exports = {
+  productCategoryExists,
+  getProductsCatalog,
+  getProductsInACategory,
+  getProductsByIdsList,
+};
