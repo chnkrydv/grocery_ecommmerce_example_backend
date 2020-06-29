@@ -1,28 +1,22 @@
 const { TOKEN_SECRET } = require('../../constants/config');
 const jwt = require('jsonwebtoken');
+const { AUTH_TOKEN_MISSING_OR_INVALID_MESSAGE } = require('../../constants/messages');
 
 function createNewToken(userId) {
-  console.log('JWT_SECRET: ' + TOKEN_SECRET);
   return jwt.sign({ userId }, TOKEN_SECRET, { expiresIn: '30m' })
 }
 
 function ifAuthenticated(req, res, next) {
   const token = req.headers['x-access-token'];
-  console.log(token);
 
-  if (!token) {
-    res.status(401).json({ message: 'Authorization token missing.' });
-    next();
-    return;
-  } else {
-    jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
-      if (err) res.status(401).json({ message: 'Not authorised. Login or signup first.' });
-      else {
-        req.userId = decoded.userId;
-        next();
-      }
-    });
-  }
+  jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+    if (err)
+      res.status(401).json({ message:  AUTH_TOKEN_MISSING_OR_INVALID_MESSAGE});
+    else {
+      req.userId = decoded.userId;
+      next();
+    }
+  });
 }
 
 module.exports = {

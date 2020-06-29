@@ -8,9 +8,7 @@ const {
   getProductsInACategory,
   getProductsByIdsList,
 } = require('../../mock_db_services/products_db_service');
-
-
-
+const { NO_REQ_IDS_MESSAGE, categoryNotFoundMessage } = require('../../constants/messages');
 
 
 
@@ -19,6 +17,9 @@ chai.should();
 const expect = chai.expect;
 
 describe('Products API', () => {
+  const noRequestIdsMessage = { message: NO_REQ_IDS_MESSAGE };
+  const condimentsNotFoundMessage = { message: categoryNotFoundMessage('condiments') };
+
   describe('GET /products/catalog', () => {
     it('sends products catalog', (done) => {
       chai
@@ -56,9 +57,6 @@ describe('Products API', () => {
         .get('/products/catalog/condiments')
         .end((_, res) => {
           const doesCondimentsExist = productCategoryExists('condiments');
-          const condimentsNotFoundMessage = {
-            message: "Requested category: 'condiments' does not exist."
-          };
 
           expect(doesCondimentsExist).to.be.false;
           res.should.have.status(404);
@@ -70,68 +68,72 @@ describe('Products API', () => {
   });
 
   describe('GET /products/ids', () => {
-    it('returns 404 if products ids list is missing in request', (done) => {
+    it('returns 400: Bad Request, if products ids list is missing in request', (done) => {
       chai
         .request(server)
         .get('/products/ids')
         .end((_, res) => {
-          const noRequestIdsMessage = {message: 'request does not contains list of requested product ids'};
-
           res.should.have.status(400);
           expect(res.body).to.deep.equal(noRequestIdsMessage);
-          
+
           done();
         });
     });
-    
+
     it('sends products based on requested product ids', (done) => {
       const someValidIdsList = ['d1', 'f4'];
 
       chai
         .request(server)
         .get('/products/ids')
-        .send({productIdList: someValidIdsList})
+        .send({ productIdList: someValidIdsList })
         .end((_, res) => {
+          const result_fromDb = getProductsByIdsList(someValidIdsList);
 
           res.should.have.status(200);
           res.body.should.be.a('array');
           res.body.length.should.be.eq(someValidIdsList.length);
-          
+          expect(res.body).to.deep.equal(result_fromDb);
+
           done();
         });
     });
-    
+
     it('ignores if any id in request object does not match', (done) => {
       const validIds = ['d1', 'f3', 'stp6'];
-      const listWithBothValidAndInvalidIds = [ ...validIds, 'some-random-id-which-does-not-exist'];
-      
+      const listWithBothValidAndInvalidIds = [...validIds, 'some-random-id-which-does-not-exist'];
+
       chai
         .request(server)
         .get('/products/ids')
-        .send({productIdList: listWithBothValidAndInvalidIds})
+        .send({ productIdList: listWithBothValidAndInvalidIds })
         .end((_, res) => {
+          const result_fromDb = getProductsByIdsList(listWithBothValidAndInvalidIds);
 
           res.should.have.status(200);
           res.body.should.be.a('array');
           res.body.length.should.be.eq(validIds.length);
-          
+          expect(res.body).to.deep.equal(result_fromDb);
+
           done();
         });
     });
-    
+
     it('sends empty array if noe of the requested id match from database', (done) => {
-      const invalidIdsList = [ 'some-invalid-id', 'this-isnt-valid-either',];
-      
+      const invalidIdsList = ['some-invalid-id', 'this-isnt-valid-either',];
+
       chai
         .request(server)
         .get('/products/ids')
-        .send({productIdList: invalidIdsList})
+        .send({ productIdList: invalidIdsList })
         .end((_, res) => {
+          const result_fromDb = getProductsByIdsList(invalidIdsList);
 
           res.should.have.status(200);
           res.body.should.be.a('array');
           res.body.length.should.be.eq(0);
-          
+          expect(res.body).to.deep.equal(result_fromDb);
+
           done();
         });
     });

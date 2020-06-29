@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha **/*.test.js --recursive --timeout 10000 --exit",
     "test:watch" : "mocha -w **/*.test.js",
-    "start": "nodemon server.js"
+    "start": "npm test && nodemon src/api/server.js"
   },
   "author": "",
   "license": "ISC",

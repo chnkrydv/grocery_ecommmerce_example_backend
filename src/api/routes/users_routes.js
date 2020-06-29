@@ -1,19 +1,29 @@
 const { getUsers, addUser, userAlreadyExists, updateAddress } = require('../../mock_db_services/users_db_service');
 const { createNewToken } = require('../middlewares/jwt');
+const {
+  BAD_SIGNUP_REQ_MESSAGE,
+  exisitingUserMessage,
+  BAD_LOGIN_REQ_MESSAGE,
+  INVALID_USERNAME_MESSAGE,
+  INVALID_PASSWORD_MESSAGE,
+  USER_ADDED_MESSAGE,
+  ADDRESS_UPDATE_MESSAGE,
+} = require('../../constants/messages');
 
 function signup(req, res) {
-  console.log(req.body);
   const { name, username, password } = req.body;
   const usernameExists = userAlreadyExists(username);
 
-  if (usernameExists) res.status(401).json({
-    message: `User with username: '${username}' already exists`
-  });
+  if (!name || !username || !password) {
+    res.status(400).json({ message: BAD_SIGNUP_REQ_MESSAGE });
+    return;
+  }
+
+  if (usernameExists) res.status(401).json({ message: exisitingUserMessage(username) });
   else {
     const newUserId = addUser(name, username, password);
-    console.log(getUsers());
     res.status(200).json({
-      message: 'user added',
+      message: USER_ADDED_MESSAGE,
       userId: newUserId,
     });
   }
@@ -21,20 +31,22 @@ function signup(req, res) {
 
 function login(req, res) {
   const { username, password } = req.body;
-  console.log(req.body);
   const usersList = getUsers();
   const user = usersList.find(user => user.username === username);
 
+  if (!username || !password) {
+    res.status(400).json({ message: BAD_LOGIN_REQ_MESSAGE });
+    return;
+  }
+
   if (!user) {
-    res.status(401).json({
-      message: 'This username is not registered. Please sign up if you are a new user.',
-    });
+    res.status(401).json({ message: INVALID_USERNAME_MESSAGE });
     return;
   }
 
   if (user.password !== password) {
     res.status(401).json({
-      message: 'Access denied. Incorrect password.'
+      message: INVALID_PASSWORD_MESSAGE
     });
     return;
   }
@@ -43,25 +55,21 @@ function login(req, res) {
   if (!token) {
     res.status(401).json({});
   } else {
-    res.status(200).json({token, user});
+    res.status(200).json({ token, user });
   }
 }
 
-function sendUserProfile(req, res){
+function sendUserProfile(req, res) {
   const usersList = getUsers();
   const user = usersList.find(user => user.id === req.userId);
-  console.log(user);
   res.status(200).json(user);
 }
 
 function saveOrUpdateAddress(req, res) {
   const userId = req.userId;
   const { address } = req.body;
-  console.log(address);
   updateAddress(userId, address);
-  res.status(200).json({
-    message: 'Address updated.'
-  });
+  res.status(200).json({ message: ADDRESS_UPDATE_MESSAGE });
 }
 
 module.exports = {
