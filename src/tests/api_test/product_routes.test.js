@@ -71,7 +71,7 @@ describe('Products API', () => {
     it('returns 400: Bad Request, if products ids list is missing in request', (done) => {
       chai
         .request(server)
-        .get('/products/ids')
+        .post('/products/ids')
         .end((_, res) => {
           res.should.have.status(400);
           expect(res.body).to.deep.equal(noRequestIdsMessage);
@@ -85,7 +85,7 @@ describe('Products API', () => {
 
       chai
         .request(server)
-        .get('/products/ids')
+        .post('/products/ids')
         .send({ productIdList: someValidIdsList })
         .end((_, res) => {
           const result_fromDb = getProductsByIdsList(someValidIdsList);
@@ -105,7 +105,7 @@ describe('Products API', () => {
 
       chai
         .request(server)
-        .get('/products/ids')
+        .post('/products/ids')
         .send({ productIdList: listWithBothValidAndInvalidIds })
         .end((_, res) => {
           const result_fromDb = getProductsByIdsList(listWithBothValidAndInvalidIds);
@@ -124,7 +124,7 @@ describe('Products API', () => {
 
       chai
         .request(server)
-        .get('/products/ids')
+        .post('/products/ids')
         .send({ productIdList: invalidIdsList })
         .end((_, res) => {
           const result_fromDb = getProductsByIdsList(invalidIdsList);

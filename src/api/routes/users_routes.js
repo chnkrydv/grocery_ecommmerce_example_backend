@@ -65,12 +65,12 @@ function login(req, res) {
 
 function sendUserProfile(req, res) {
   const usersList = getUsers();
-  const user = usersList.find(user => user.id === req.userId);
+  const user = usersList.find(user => user.id === req.body.userId);
   res.status(200).json(user);
 }
 
 function saveOrUpdateAddress(req, res) {
-  const userId = req.userId;
+  const userId = req.body.userId;
   const { address } = req.body;
 
   if (!address) {

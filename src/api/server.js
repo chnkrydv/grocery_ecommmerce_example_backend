@@ -44,7 +44,7 @@ server.post('/account/order', ifAuthenticated, createOrder);
 // Product Queries
 server.get('/products/catalog', sendProductsCatalog);
 server.get('/products/catalog/:category', sendCategoryItems);
-server.get('/products/ids', sendRandomlyRequestedItems);
+server.post('/products/ids', sendRandomlyRequestedItems);
 // Product Queries
 
 
