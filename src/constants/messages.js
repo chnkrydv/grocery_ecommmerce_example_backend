@@ -12,6 +12,9 @@ const exisitingUserMessage = (username) => `User with username: '${username}' al
 const NO_REQ_IDS_MESSAGE = 'Request does not contains list of requested product ids';
 const categoryNotFoundMessage = (category) => `Requested category: ${category} does not exist.` ;
 
+const BAD_CREATE_ORDER_REQ_MESSAGE = "'itemsList' in request is either missing or not in correct format";
+const SOME_ITEMS_LIMITED_MESSAGE = 'Some of the items are out of stock or not in requested numbers';
+const ORDER_PLACED_MESSAGE = 'order placed';
 
 
 module.exports = {
@@ -27,5 +30,9 @@ module.exports = {
   exisitingUserMessage,
 
   NO_REQ_IDS_MESSAGE,
-  categoryNotFoundMessage
+  categoryNotFoundMessage,
+
+  BAD_CREATE_ORDER_REQ_MESSAGE,
+  SOME_ITEMS_LIMITED_MESSAGE,
+  ORDER_PLACED_MESSAGE,
 };

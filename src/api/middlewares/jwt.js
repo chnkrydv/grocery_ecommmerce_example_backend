@@ -13,7 +13,7 @@ function ifAuthenticated(req, res, next) {
     if (err)
       res.status(401).json({ message:  AUTH_TOKEN_MISSING_OR_INVALID_MESSAGE});
     else {
-      req.userId = decoded.userId;
+      req.body.userId = decoded.userId;
       next();
     }
   });

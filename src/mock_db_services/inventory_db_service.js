@@ -61,7 +61,7 @@ const inventory = {
 };
 
 function checkLimitedItems(itemsList){
-  const limitedItems = itemsList.filer(item => inventory[item.productId]['stock'] < item.requested);
+  const limitedItems = itemsList.filter(item => inventory[item.productId]['stock'] < item.requested);
   const limitedItemsStock = limitedItems.map(item => ({
     productId: item.productId,
     stock: inventory[item.productId]['stock']

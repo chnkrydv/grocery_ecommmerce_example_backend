@@ -1,10 +1,12 @@
 const ordersList = [
-  order(0, 0, [{f1: 12}], '12July', 'active'),
+  o(0, 0, [{ productId: 'f1', requested: 12 }], '12July', 'active'),
 ];
 
-function order(id, userId, itemsList, deliveryDate, status) {
+function o(id, userId, itemsList, deliveryDate, status) {
   return { id, userId, itemsList, deliveryDate, status };
 }
+
+function getTotalOrdersCount() { return ordersList.length; }
 
 function getOrders(userId) {
   return ordersList.filter(order => order.userId === userId);
@@ -12,7 +14,7 @@ function getOrders(userId) {
 
 function createNewOrder(userId, itemsList, deliveryDate) {
   const newOrderId = ordersList.length;
-  const newOrder = order(newOrderId, userId, itemsList, deliveryDate, 'pending');
+  const newOrder = o(newOrderId, userId, itemsList, deliveryDate, 'pending');
   ordersList.push(newOrder);
   return newOrderId;
 }
@@ -20,4 +22,5 @@ function createNewOrder(userId, itemsList, deliveryDate) {
 module.exports = {
   getOrders,
   createNewOrder,
+  getTotalOrdersCount,
 };
